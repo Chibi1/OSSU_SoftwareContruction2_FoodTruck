@@ -2,6 +2,9 @@ package test;
 
 import model.Kitchen;
 import model.Owner;
+import model.exceptions.NoCookException;
+import model.exceptions.NoIngredientException;
+import model.exceptions.NotEnoughMoneyException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,12 +32,24 @@ public class OwnerTest {
         assertEquals(testOwner.getKitchen().getIngredientCount(),30);
         assertEquals(testOwner.getKitchen().getTacoCount(),4);
 
-        assertTrue(testOwner.orderMoreTacos(10));
+        try {
+            assertTrue(testOwner.orderMoreTacos(10));
+        } catch (NoIngredientException e) {
+            e.printStackTrace();
+        } catch (NoCookException e) {
+            e.printStackTrace();
+        }
 
         assertEquals(testOwner.getKitchen().getTacoCount(),14);
         assertEquals(testOwner.getKitchen().getIngredientCount(),0);
 
-        assertFalse(testOwner.orderMoreTacos(1));
+        try {
+            assertFalse(testOwner.orderMoreTacos(1));
+        } catch (NoIngredientException e) {
+            //
+        } catch (NoCookException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -42,12 +57,20 @@ public class OwnerTest {
         assertEquals(testOwner.getKitchen().getIngredientCount(), 30);
         assertEquals(testOwner.getKitchen().getBalance(),100);
 
-        assertTrue(testOwner.askForMoreIngredients(30));
+        try {
+            assertTrue(testOwner.askForMoreIngredients(30));
+        } catch (NotEnoughMoneyException e) {
+            //
+        }
 
         assertEquals(testOwner.getKitchen().getBalance(),40);
         assertEquals(testOwner.getKitchen().getIngredientCount(),60);
 
-        assertFalse(testOwner.askForMoreIngredients(100000));
+        try {
+            assertFalse(testOwner.askForMoreIngredients(100000));
+        } catch (NotEnoughMoneyException e) {
+            //
+        }
     }
 
 

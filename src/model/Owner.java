@@ -1,5 +1,9 @@
 package model;
 
+import model.exceptions.NoCookException;
+import model.exceptions.NoIngredientException;
+import model.exceptions.NotEnoughMoneyException;
+
 public class Owner {
 
     private String name;
@@ -17,14 +21,17 @@ public class Owner {
     // REQUIRES: we have enough ingredients to make the specified amount of tacos
     // MODIFIES: this
     // EFFECTS: calls makeTaco on the kitchen, returns true
-    public boolean orderMoreTacos(int amount) {
+    public boolean orderMoreTacos(int amount) throws NoIngredientException, NoCookException {
+        if (kitchen.getIngredientCount() < amount * 3) {
+            throw new NoIngredientException("Not enough ingredients");
+        }
         kitchen.makeTaco(amount);
         return true;
     }
 
     //MODIFIES: this 
     //EFFECTS: calls buyIngredients on the kitchen, returns true.
-    public boolean askForMoreIngredients(int amount) {
+    public boolean askForMoreIngredients(int amount) throws NotEnoughMoneyException {
         this.kitchen.buyIngredients(amount);
         return true;
     }
